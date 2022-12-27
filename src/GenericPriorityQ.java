@@ -1,8 +1,8 @@
 import java.util.ArrayList;
 import java.util.Iterator;
-import java.util.function.Consumer;
 
-public class GenericPriorityQ<T> implements Iterable<T> {
+
+public class GenericPriorityQ<T> implements Iterable<T>{
     private ArrayList<T>[] q;
     private int len;
 
@@ -19,6 +19,10 @@ public class GenericPriorityQ<T> implements Iterable<T> {
         for (int i = 0; i < size; i++) {
             q[i] = new ArrayList<T>();
         }
+    }
+
+    public int getLength(){
+        return this.len;
     }
 
     //add item to the priorityQ
@@ -43,18 +47,6 @@ public class GenericPriorityQ<T> implements Iterable<T> {
         else {
             temp = q[i].get(0);
             q[i].remove(0);
-        }
-        return temp;
-    }
-
-    public T pop() {
-        int range = q.length, i;
-        T temp;
-        for (i = 0; i < range && q[i].isEmpty(); i++) ;
-        if (i >= range)
-            return null;
-        else {
-            temp = q[i].get(0);
         }
         return temp;
     }
@@ -84,31 +76,46 @@ public class GenericPriorityQ<T> implements Iterable<T> {
         return sumSize;
     }
 
-
     @Override
-    public Iterator<T> iterator() {
-        return new CustomIterator<T>(this);
-    }
-}
-
-
-class CustomIterator<T> implements Iterator<T> {
-    T current;
-
-    public CustomIterator(GenericPriorityQ<T> gpq){
-        current = gpq.pop();
+    public Iterator iterator() {
+        return new CustomIterator();
     }
 
-    @Override
-    public boolean hasNext() {
-        for (int i = 0; i < 10; i++) {
+    class CustomIterator implements Iterator<T>{
 
+        int len = q.length, indexArray=0, indexItem=0;
+        Iterator <T> it;
+
+        CustomIterator(){
+            it = q[0].iterator();
         }
-        return false;
-    }
 
-    @Override
-    public T next() {
-        return null;
+        @Override
+        public boolean hasNext() {
+            int indexArr= 0;
+            int len = q.length;
+            for (indexArr = 0; indexArr<len && q[indexArr].isEmpty(); indexArr++);
+
+            if(indexArr>=len){
+                return false;
+            }
+            return true;
+        }
+
+        @Override
+        public T next() {
+            while (indexArray < len) {
+                if (it.hasNext())
+                    return it.next();
+                else if (q[indexArray].isEmpty() && indexArray < len)
+                    indexArray++;
+                if (indexArray < len) {
+                    it = q[indexArray].iterator();
+                    return q[indexArray].get(0);
+                } else
+                    return null;
+            }
+            return null;
+        }
     }
 }
