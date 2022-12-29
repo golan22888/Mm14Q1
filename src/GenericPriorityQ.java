@@ -1,5 +1,6 @@
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.NoSuchElementException;
 
 
 public class GenericPriorityQ<T> implements Iterable<T>{
@@ -83,39 +84,40 @@ public class GenericPriorityQ<T> implements Iterable<T>{
 
     class CustomIterator implements Iterator<T>{
 
-        int len = q.length, indexArray=0, indexItem=0;
+        int len = q.length, indexArray, indexItem;
         Iterator <T> it;
 
         CustomIterator(){
             it = q[0].iterator();
+            indexArray = 0;
+            indexItem = 0;
         }
 
         @Override
         public boolean hasNext() {
-            int indexArr= 0;
-            int len = q.length;
-            for (indexArr = 0; indexArr<len && q[indexArr].isEmpty(); indexArr++);
+            boolean res = false;
 
-            if(indexArr>=len){
-                return false;
-            }
-            return true;
+            if (indexItem < size())
+                res = true;
+
+            return res;
         }
 
         @Override
         public T next() {
-            while (indexArray < len) {
+            if (this.hasNext()) {
+                indexItem++;
                 if (it.hasNext())
                     return it.next();
-                else if (q[indexArray].isEmpty() && indexArray < len)
+
+                if (indexArray < len)
                     indexArray++;
-                if (indexArray < len) {
-                    it = q[indexArray].iterator();
-                    return q[indexArray].get(0);
-                } else
-                    return null;
+                while (indexArray < len && q[indexArray].isEmpty()) {
+                    indexArray++;
+                }
+                return q[indexArray].get(0);
             }
-            return null;
+            throw new NoSuchElementException();
         }
     }
 }

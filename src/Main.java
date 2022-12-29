@@ -12,8 +12,8 @@ public class Main {
 //        System.out.println(gpq.poll());
         System.out.println(gpq.size());
 
-        for (Object item : gpq) {
-            System.out.println("+");
+        for (Iterator<Integer> it = gpq.iterator(); it.hasNext();) {
+            System.out.println(it.next());
         }
     }
 }
