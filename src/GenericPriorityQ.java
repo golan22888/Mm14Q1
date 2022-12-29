@@ -110,11 +110,13 @@ public class GenericPriorityQ<T> implements Iterable<T>{
                 if (it.hasNext())
                     return it.next();
 
-                if (indexArray < len)
+                if (indexArray < len-1)
                     indexArray++;
                 while (indexArray < len && q[indexArray].isEmpty()) {
                     indexArray++;
                 }
+                it = q[indexArray].iterator();
+                it.next();
                 return q[indexArray].get(0);
             }
             throw new NoSuchElementException();
