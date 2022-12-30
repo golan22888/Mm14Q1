@@ -43,9 +43,10 @@ public class GenericPriorityQ<T> implements Iterable<T>{
         int range = q.length, i;
         T temp;
         for (i = 0; i < range && q[i].isEmpty(); i++) ;
-        if (i >= range)
+
+        if (i >= range) //In case the priority queue is empty
             return null;
-        else {
+        else {  //we reached an object before finishing going over the priority queue.
             temp = q[i].get(0);
             q[i].remove(0);
         }
@@ -96,7 +97,7 @@ public class GenericPriorityQ<T> implements Iterable<T>{
         @Override
         public boolean hasNext() {
             boolean res = false;
-
+            //checks if we have more objects in the priority queue.
             if (indexItem < size())
                 res = true;
 
@@ -105,8 +106,10 @@ public class GenericPriorityQ<T> implements Iterable<T>{
 
         @Override
         public T next() {
+
             if (this.hasNext()) {
                 indexItem++;
+                //check if we are in arraylist and didn't finish it already.
                 if (it.hasNext())
                     return it.next();
 
@@ -115,6 +118,7 @@ public class GenericPriorityQ<T> implements Iterable<T>{
                 while (indexArray < len && q[indexArray].isEmpty()) {
                     indexArray++;
                 }
+                //we are starting a non-empty array list.
                 it = q[indexArray].iterator();
                 it.next();
                 return q[indexArray].get(0);
